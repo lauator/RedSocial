@@ -2,18 +2,19 @@ package model;
 
 public class Message {
     private Integer messageId;
-    private String username;
     private String message;
     private String date;
+
+    private String userId;
 
     public Message() {
     }
 
-    public Message(Integer messageId, String username, String message, String date) {
+    public Message(Integer messageId, String message, String date, String userId) {
         this.messageId = messageId;
-        this.username = username;
         this.message = message;
         this.date = date;
+        this.userId = userId;
     }
 
     public Integer getMessageId() {
@@ -24,12 +25,12 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getMessage() {
@@ -46,5 +47,15 @@ public class Message {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageId=" + messageId +
+                ", message='" + message + '\'' +
+                ", date='" + date + '\'' +
+                ", userId='" + userId + '\'' +
+                '}';
     }
 }

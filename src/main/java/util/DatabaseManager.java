@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class DatabaseManager {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/redSocial";
+    private static final String URL = "jdbc:mysql://localhost:3306/red_social";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 
@@ -17,6 +17,7 @@ public class DatabaseManager {
     public static synchronized Connection getConnection() throws CustomDatabaseException {
         if (connection == null) {
             try {
+
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
             } catch (SQLException e) {
 
@@ -37,8 +38,10 @@ public class DatabaseManager {
     }
 
     public static void createUpdateDelete(String sql, Object... parameters) throws CustomDatabaseException {
-        try (Connection conn = getConnection();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+        try {
+
+            Connection conn = getConnection();
+            PreparedStatement statement = conn.prepareStatement(sql);
 
 
             for (int i = 0; i < parameters.length; i++) {
@@ -49,8 +52,6 @@ public class DatabaseManager {
 
         } catch (SQLException e) {
             throw new CustomDatabaseException("Failed to operate", e);
-        }finally {
-            disconnect();
         }
     }
 
@@ -68,8 +69,6 @@ public class DatabaseManager {
 
         } catch (SQLException e) {
             throw new CustomDatabaseException("Failed to read", e);
-        }finally {
-            disconnect();
         }
 
 
