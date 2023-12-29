@@ -5,12 +5,22 @@ public class Message {
     private String message;
     private String date;
 
-    private String userId;
+    private Integer userId;
 
     public Message() {
     }
 
-    public Message(Integer messageId, String message, String date, String userId) {
+    public Message(String message) {
+        this.message = message;
+    }
+
+    public Message(String message, Integer userId) {
+        this.message = message;
+        this.userId = userId;
+    }
+
+
+    public Message(Integer messageId, String message, String date, Integer userId) {
         this.messageId = messageId;
         this.message = message;
         this.date = date;
@@ -25,11 +35,11 @@ public class Message {
         this.messageId = messageId;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

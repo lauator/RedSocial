@@ -14,18 +14,41 @@ public class Main {
 
         UserRepository userRepository = new UserRepository();
 
-        User user = userRepository.getById(3);
-        user.setEmail("carlos@gmail.com");
-        userRepository.save(user);
-        System.out.println("Usuario actualizado");
+        MessageRepository messageRepository = new MessageRepository();
 
-        System.out.println("Listado de usuarios: ");
+        /*Message message = new Message("Este es el mensaje de lauator numero 2", 1);
+        messageRepository.save(message);
 
-        List<User> users = userRepository.getAll();
+*/
 
-        for (User object : users) {
-            System.out.println("Usuario: " + object.toString());
+        Message newMessage = messageRepository.getById(7);
+       /* newMessage.setMessage("Este el penultimo mensaje de Carlos");
+        messageRepository.save(newMessage);*/
+
+        /*User user = userRepository.getById(1);
+
+         */
+
+
+
+        messageRepository.remove(newMessage);
+
+        List<Message> messages = messageRepository.getAll();
+
+
+
+        System.out.println("Todos los mensajes");
+        for (Message message : messages) {
+            System.out.println(message.toString());
         }
+
+
+
+
+
+
+
+
 
 
 

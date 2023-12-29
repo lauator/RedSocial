@@ -67,4 +67,17 @@ public class UserRepository implements Repository<User> {
         return new User(rs.getInt("id"), rs.getString("username"),
                 rs.getString("password"), rs.getString("email"));
     }
+
+    public User searchUserByEmail(String email) throws SQLException, CustomDatabaseException {
+        String sql = "SELECT * FROM users WHERE email = ?";
+
+        ResultSet rs = DatabaseManager.read(sql, email);
+
+        User user = null;
+        while(rs.next()){
+            user = createUser(rs);
+        }
+
+        return user;
+    }
 }
