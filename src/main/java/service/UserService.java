@@ -6,6 +6,7 @@ import util.UserServiceException;
 import util.CustomDatabaseException;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserService {
@@ -19,7 +20,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void createUser(String username, String password, String email) throws UserServiceException, SQLException, CustomDatabaseException {
+    public Integer createUser(String username, String password, String email) throws UserServiceException, SQLException, CustomDatabaseException {
         if (username.length() > 20) {
             throw new UserServiceException("User must contain at most 20 characters");
         } else if (username.length() < 4) {
@@ -49,55 +50,49 @@ public class UserService {
         User user = new User(username, password, email);
         userRepository.save(user);
 
+        return userRepository.searchUserByEmail(user.getEmail()).getUserId();
+
     }
 
-    public void changeUsername(String email, String newUsername, String password) throws SQLException, CustomDatabaseException, UserServiceException {
-
-        User user = searchUserByEmail(email);
-
-        if (user == null) {
-            throw new UserServiceException("User does not exist");
-        }
-
-        if (newUsername.length() > 20) {
+    public void updateUser(Integer id, String username, String password, String email) throws UserServiceException, SQLException, CustomDatabaseException {
+        if (username.length() > 20) {
             throw new UserServiceException("User must contain at most 20 characters");
-        } else if (newUsername.length() < 4) {
+        } else if (username.length() < 4) {
             throw new UserServiceException("User must contain at least 4 characters");
         }
 
-        if (!user.getPassword().equals(password)) {
-            throw new UserServiceException("The password don´t match");
-        }
-
-        user.setUsername(newUsername);
-        userRepository.save(user);
-    }
-
-    public void changePassword(String email, String password, String newPassword) throws SQLException, CustomDatabaseException, UserServiceException {
-
-        User user = searchUserByEmail(email);
-
-        if (user == null) {
-            throw new UserServiceException("User does not exist");
-        }
-
-        if (newPassword.length() > 20) {
+        if (password.length() > 20) {
             throw new UserServiceException("Password must contain at most 20 characters");
-        } else if (newPassword.length() < 4) {
-            throw new UserServiceException("Password must contain at least 4 characters");
+        } else if (password.length() < 8) {
+            throw new UserServiceException("Password must contain at least 8 characters");
         }
 
-        if (!user.getPassword().equals(password)) {
-            throw new UserServiceException("The password don´t match");
+        if (email.length() > 30) {
+            throw new UserServiceException("Email must contain at most 20 characters");
+        } else if (email.length() < 4) {
+            throw new UserServiceException("Email must contain at least 4 characters");
         }
 
-        user.setPassword(newPassword);
+        if (!email.contains("@")) {
+            throw new UserServiceException("Email must contain @");
+        }
+
+
+        User user = searchById(id);
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+
         userRepository.save(user);
+
+
+
     }
 
-    public void deleteUser(String email) throws SQLException, CustomDatabaseException, UserServiceException {
 
-        User user = searchUserByEmail(email);
+    public void deleteUser(Integer id) throws SQLException, CustomDatabaseException, UserServiceException {
+
+        User user = searchById(id);
 
         if (user == null) {
             throw new UserServiceException("User does not exist");
@@ -116,7 +111,14 @@ public class UserService {
         return userRepository.getById(id);
     }
 
-    public List<User> listAll() throws SQLException, CustomDatabaseException {
+    public List<User> listAll() throws SQLException, CustomDatabaseException, UserServiceException {
+        List<User> users = userRepository.getAll();
+
+        if(users == null){
+            throw new UserServiceException("Failed to list all users");
+        }
+
+
 
         return userRepository.getAll();
 

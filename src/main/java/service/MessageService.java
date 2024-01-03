@@ -2,12 +2,17 @@ package service;
 
 
 import model.Message;
+import model.User;
 import repository.MessageRepository;
 import util.CustomDatabaseException;
+import util.DatabaseManager;
 import util.MessageServiceException;
+import util.UserServiceException;
 
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageService {
@@ -69,6 +74,23 @@ public class MessageService {
     public List<Message> listAll() throws SQLException, CustomDatabaseException {
 
         return messageRepository.getAll();
+
+    }
+
+    public Message searchById(Integer id) throws MessageServiceException, SQLException, CustomDatabaseException {
+        if(id == null){
+            throw new MessageServiceException("You must indicate the id");
+        }
+        return messageRepository.getById(id);
+    }
+
+    public List<Message> getAllByUser(User user) throws CustomDatabaseException, SQLException {
+
+        List<Message> messages = messageRepository.getAllByUser(user);
+
+
+
+        return messages;
 
     }
 
